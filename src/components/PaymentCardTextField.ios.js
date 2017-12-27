@@ -18,6 +18,29 @@ const FieldStylePropType = {
   color: PropTypes.string,
 }
 
+const nativeComponents = {}
+
+function getNativeComponent(name) {
+  if (nativeComponents[name]) return nativeComponents[name]
+  const component = requireNativeComponent(name, PaymentCardTextField, {
+    nativeOnly: {
+      borderColor: true,
+      borderWidth: true,
+      cornerRadius: true,
+      textColor: true,
+      fontFamily: true,
+      fontWeight: true,
+      fontStyle: true,
+      fontSize: true,
+      enabled: true,
+      params: true,
+      onChange: true,
+    },
+  })
+  nativeComponents[name] = component
+  return component
+}
+
 export default class PaymentCardTextField extends Component {
   static propTypes = {
     ...ViewPropTypes,
@@ -116,7 +139,7 @@ export default class PaymentCardTextField extends Component {
       color,
       ...fieldStyles
     } = StyleSheet.flatten(style)
-
+    const NativePaymentCardTextField = getNativeComponent('TPSCardField')
     return (
       <TouchableWithoutFeedback
         onPress={this.handlePress}
@@ -158,21 +181,5 @@ const styles = StyleSheet.create({
     height: 44,
     // Set default background color to prevent transparent background
     backgroundColor: '#ffffff',
-  },
-})
-
-const NativePaymentCardTextField = requireNativeComponent('TPSCardField', PaymentCardTextField, {
-  nativeOnly: {
-    borderColor: true,
-    borderWidth: true,
-    cornerRadius: true,
-    textColor: true,
-    fontFamily: true,
-    fontWeight: true,
-    fontStyle: true,
-    fontSize: true,
-    enabled: true,
-    params: true,
-    onChange: true,
   },
 })
